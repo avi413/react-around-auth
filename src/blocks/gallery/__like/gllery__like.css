@@ -1,0 +1,5 @@
+.gllery__like{
+    display: grid;
+    text-align: center;
+    gap: 5px;
+}

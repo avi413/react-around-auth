@@ -1,0 +1,6 @@
+.button_inactive {
+    cursor: not-allowed;
+    background-color: #FFF!important;
+    color: rgba(0, 0, 0, .2)!important;
+    border: 1px solid rgba(0, 0, 0, .2)!important;
+  }

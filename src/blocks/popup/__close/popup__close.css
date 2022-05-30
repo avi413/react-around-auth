@@ -1,0 +1,18 @@
+  .popup__close {
+    margin-left: 470px;
+    border:none;
+    background: none;
+  }
+
+  .popup__close::before {
+    content: url("../../../images/Close-Icon.svg");
+  }
+
+  @media screen and (max-width: 640px){
+    .popup__close {
+      margin-left: 250px;
+    }
+    .popup__close::before {
+      content: url("../../../images/mobile-close-icon.svg");
+    }
+  }

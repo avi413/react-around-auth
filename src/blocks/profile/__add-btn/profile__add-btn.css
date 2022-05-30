@@ -1,0 +1,17 @@
+.profile__add-btn {
+    width: 150px;
+    height: 50px;
+    border-radius: 2px;
+
+}
+
+.profile__add-btn::before {
+    content: url("../../../images/plus.svg");
+}
+
+@media screen and (max-width: 968px){
+    .profile__add-btn {
+        width: 282px;
+    }
+}
+

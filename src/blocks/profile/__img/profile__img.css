@@ -1,0 +1,9 @@
+.profile__img {
+    position: relative;
+    float:left;
+    margin:5px;
+}
+
+.profile__img:hover .profile__edit-avatar{
+  display: block;
+}

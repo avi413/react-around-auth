@@ -1,0 +1,15 @@
+.profile__edit-avatar {
+    position:absolute;
+    top:0;
+    left:0;
+    display:none;
+    border-radius: 60px;
+    padding: 50px;
+    background-color: rgba(0, 0, 0, 0.8);
+    animation: fadein 0.3s;
+}
+
+@keyframes fadein {
+    from { background-color: rgba(0, 0, 0, 0);}
+    to { background-color: rgba(0, 0, 0, 0.8);}
+  }

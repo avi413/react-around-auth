@@ -1,0 +1,15 @@
+.profile__text {
+    display: grid;
+    row-gap: 16px;
+    column-gap: 18px;
+    grid-template: "name edit" auto
+                "about about"  auto;
+    align-items: center;    
+}
+
+@media screen and (max-width: 968px){
+    .profile__text {
+        row-gap: 14px;
+        column-gap: 10px;
+    }
+}

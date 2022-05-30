@@ -1,0 +1,21 @@
+.profile__edit-btn {
+    width: 24px;
+    height: 24px;
+    line-height: 0;
+    grid-area: edit;
+}
+
+.profile__edit-btn::before {
+    content: url("../../../images/edit.svg"); 
+}
+
+@media screen and (max-width: 968px){
+    .profile__edit-btn {  
+        height: 18px;
+        width: 18px;
+        margin-top: 26px;
+    }
+    .profile__edit-btn::before {
+        content: url("../../../images/edit-mobile.svg");  
+    }
+}
