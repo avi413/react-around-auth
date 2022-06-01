@@ -1,0 +1,12 @@
+.authe__form {
+  display: grid;
+  max-width: 358px;
+  margin: auto;
+  gap: 30px;
+}
+
+@media only screen and (max-width: 425px) {
+  .authe__form {
+    max-width: 260px;
+  }
+}

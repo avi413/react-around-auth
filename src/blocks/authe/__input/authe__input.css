@@ -1,0 +1,15 @@
+.authe__input {
+    font-family: Inter;
+    border:none;
+    border-bottom: 2px solid #ccc;
+    padding: 5px 10px;
+    outline: none;
+    background: #000;
+    color: #fff;
+    font-size: 14px;
+}
+
+.authe__input::placeholder {
+    color: #ccc;
+
+}
