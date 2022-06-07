@@ -1,3 +1,6 @@
-.popup__close_place_tooltip {
-    margin-left: 0px;
-}
+@media only screen and (max-width: 640px) {
+    .popup__close_place_tooltip {
+        margin-left: 0px;
+    }
+  }
+  

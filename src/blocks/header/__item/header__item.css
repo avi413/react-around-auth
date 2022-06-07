@@ -1,0 +1,9 @@
+.header__item {
+    text-decoration: none;
+    color: #fff;
+}
+
+.header__item:hover {
+
+    color: #A9A9A9;
+}

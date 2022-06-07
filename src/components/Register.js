@@ -42,12 +42,12 @@ class Register extends React.Component {
           <input className="authe__input" placeholder='Email' required id="username" name="username" type="text" value={this.state.username} onChange={this.handleChange} />
           <input className="authe__input" placeholder='Password' required id="password" name="password" type="password" value={this.state.password} onChange={this.handleChange} />
           <div className="authe__button-container">
-            <button type="submit" className="authe__btn">Log in</button>
+            <button type="submit" className="authe__btn">Sign up</button>
           </div>
         </form>
 
         <div className="authe__footer">
-          <p  className="authe__text">Already a member? <Link to="/register" className="authe__link">Log in here!</Link></p>
+          <p  className="authe__text">Already a member? <Link to="/login" className="authe__link">Log in here!</Link></p>
         </div>
       </div>
     );

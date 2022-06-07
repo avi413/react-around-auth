@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import Header from "./Header";
@@ -19,12 +14,14 @@ import ProtectedRoute from "./ProtectedRoute";
 import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
+import success from "../images/success.svg";
 import error from "../images/error.svg";
-
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
+  const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -59,6 +56,8 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setIsErrorPopupOpen(false);
+    setIsSuccessPopupOpen(false);
     setSelectedCard({
       isCardOpen: false,
       link: "",
@@ -145,74 +144,82 @@ function App() {
 
   return (
     <Router>
-    <div className="app">
-      <CurrentUserContext.Provider value={currentUser}>
-        <InfoTooltip 
-          link={error}
-          title = "Success! You have now been registered."
-        />
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
-
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
-
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-        />
-
-        <PopupWithForm
-          title="Are you sure?"
-          name="delete"
-          lable="Yes"
-          isOpen={false}
-          close={closeAllPopups}
-          formName="deleteForm"
-        />
-
-        <ImagePopup selectedCard={selectedCard} close={closeAllPopups} />
-        <Header />
-        <Switch>
-
-        <Route path="/login">
-            <Login handleLogin={handleLogin} />
-          </Route>
-        <Route path="/register" >
-            <Register />
-          </Route>
-         
-          <ProtectedRoute
-            path="/"
-            loggedIn={loggedIn}
-            component={Main}
-            onEditProfileClick={handleEditProfileClick}
-            onAddPlaceClick={handleAddPlaceClick}
-            onEditAvatarClick={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-            isEditProfilePopupOpen={isEditProfilePopupOpen}
-            isAddPlacePopupOpen={isAddPlacePopupOpen}
-            isEditAvatarPopupOpen={isEditAvatarPopupOpen}
-            selectedCard={selectedCard}
-            cards={cards}
+      <div className="app">
+        <CurrentUserContext.Provider value={currentUser}>
+          <InfoTooltip
+            link={success}
+            title="Success! You have now been registered."
+            onClose={closeAllPopups}
+            isOpen={isSuccessPopupOpen}
           />
-         
-  
+          <InfoTooltip
+            link={error}
+            title="Oops, something went wrong! Please try again."
+            onClose={closeAllPopups}
+            isOpen={isErrorPopupOpen}
+          />
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+          />
 
-         </Switch>
-        <Footer />
-       
-      </CurrentUserContext.Provider>
-    </div>
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
+
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlaceSubmit}
+          />
+
+          <PopupWithForm
+            title="Are you sure?"
+            name="delete"
+            lable="Yes"
+            isOpen={false}
+            close={closeAllPopups}
+            formName="deleteForm"
+          />
+
+          <ImagePopup selectedCard={selectedCard} close={closeAllPopups} />
+
+          <Switch>
+            <Route path="/login">
+              <Header loggedIn={loggedIn} page={"Sign Up"} link="/register" />
+              <Login handleLogin={handleLogin} />
+            </Route>
+            <Route path="/register">
+              <Header loggedIn={loggedIn} page={"Log in"} link="/login" />
+              <Register />
+            </Route>
+
+            <ProtectedRoute
+              path="/"
+              email={"avi413@gmail.com"}
+              page="Log out"
+              link="/login"
+              loggedIn={loggedIn}
+              component={Main}
+              onEditProfileClick={handleEditProfileClick}
+              onAddPlaceClick={handleAddPlaceClick}
+              onEditAvatarClick={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              isEditProfilePopupOpen={isEditProfilePopupOpen}
+              isAddPlacePopupOpen={isAddPlacePopupOpen}
+              isEditAvatarPopupOpen={isEditAvatarPopupOpen}
+              selectedCard={selectedCard}
+              cards={cards}
+            />
+          </Switch>
+          <Footer />
+        </CurrentUserContext.Provider>
+      </div>
     </Router>
   );
 }
