@@ -27,9 +27,10 @@ class Login extends React.Component {
       return;
     }
     auth
-      .authorize(this.state.username, this.state.password)
+      .authorize(this.state.password,this.state.username)
       .then((data) => {
-        if (data.jwt) {
+        console.log(data);
+        if (data.token) {
           this.setState(
             {
               username: "",
@@ -75,7 +76,7 @@ class Login extends React.Component {
             onChange={this.handleChange}
           />
           <div className="authe__button-container">
-            <button type="submit" className="authe__btn">
+            <button type="submit" className="authe__btn" onClick={this.handleSubmit}>
               Log in
             </button>
           </div>
@@ -84,7 +85,7 @@ class Login extends React.Component {
         <div className="authe__footer">
           <p className="authe__text">
             Ready to begin your journey?
-            <Link to="/register" className="authe__link">
+            <Link to="/signup" className="authe__link">
               Sign up
             </Link>
           </p>

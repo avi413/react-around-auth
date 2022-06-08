@@ -1,13 +1,14 @@
-export const BASE_URL = 'https://api.nomoreparties.co';
+export const BASE_URL = 'https://register.nomoreparties.co';
 
-export const register = (username, password, email) => {
-  return fetch(`${BASE_URL}/auth/local/register`, {
+export const register = ( password, email) => {
+  return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
+      'authorization': '9b621f0f-5dfe-43f1-95fd-e9cc188bcc35',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({username, password, email})
+    body: JSON.stringify({password, email})
   })
   .then((response) => {
     return response.json();
@@ -17,19 +18,21 @@ export const register = (username, password, email) => {
   })
   .catch((err) => console.log(err));
 };
-export const authorize = (identifier, password) => {
-  return fetch(`${BASE_URL}/auth/local`, {
+export const authorize = (password, email) => {
+  return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
+      'authorization': '9b621f0f-5dfe-43f1-95fd-e9cc188bcc35',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({identifier, password})
+    body: JSON.stringify({password, email})
   })
   .then((response => response.json()))
   .then((data) => {
-    if (data.user) {
-      localStorage.setItem('jwt', data.jwt);
+    console.log(data);
+    if (data.token) {
+      localStorage.setItem('jwt', data.token);
       return data;
     }
   })

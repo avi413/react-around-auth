@@ -188,12 +188,12 @@ function App() {
           <ImagePopup selectedCard={selectedCard} close={closeAllPopups} />
 
           <Switch>
-            <Route path="/login">
-              <Header loggedIn={loggedIn} page={"Sign Up"} link="/register" />
+            <Route path="/signin">
+              <Header loggedIn={loggedIn} page={"Sign Up"} link="/signup" />
               <Login handleLogin={handleLogin} />
             </Route>
-            <Route path="/register">
-              <Header loggedIn={loggedIn} page={"Log in"} link="/login" />
+            <Route path="/signup">
+              <Header loggedIn={loggedIn} page={"Log in"} link="/signin" />
               <Register />
             </Route>
 
@@ -201,7 +201,7 @@ function App() {
               path="/"
               email={"avi413@gmail.com"}
               page="Log out"
-              link="/login"
+              link="/signin"
               loggedIn={loggedIn}
               component={Main}
               onEditProfileClick={handleEditProfileClick}
