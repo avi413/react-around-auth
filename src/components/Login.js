@@ -29,7 +29,6 @@ class Login extends React.Component {
     auth
       .authorize(this.state.password,this.state.username)
       .then((data) => {
-        console.log(data);
         if (data.token) {
           this.setState(
             {
@@ -47,7 +46,10 @@ class Login extends React.Component {
         // parent App's loggedIn state to true,
         // then redirect to '/diary'
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        this.props.handleErrorLogin();
+      });
   }
 
   render() {

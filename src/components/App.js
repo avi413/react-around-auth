@@ -6,6 +6,7 @@ import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import { api } from "../utils/api";
+import * as auth from "../utils/auth.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -26,19 +27,27 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const jwt = localStorage.getItem('jwt');
 
-  useEffect(() => {
-    api
-      .init()
-      .then(([user, cards]) => {
-        setCurrentUser(user);
-        setCards(cards);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
+  useEffect(async () => {
+    await auth.getContent(jwt)
+    .then( (res) =>{
+      if(res) {
+        setLoggedIn(true);
+        api
+        .init()
+        .then(([user, cards]) => {
+          setCurrentUser(user);
+          setCards(cards);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      }
+    });
+  },[loggedIn])
+
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
@@ -139,7 +148,16 @@ function App() {
       });
   };
   const handleLogin = () => {
-    // handle the log in here
+    setIsSuccessPopupOpen(true);
+    setLoggedIn(true);
+  };
+
+  const  handleLogedInUser = async () => {
+     setLoggedIn(true);
+  };
+
+  const handleErrorLogin = () => {
+    setIsErrorPopupOpen(true);
   };
 
   return (
@@ -190,7 +208,7 @@ function App() {
           <Switch>
             <Route path="/signin">
               <Header loggedIn={loggedIn} page={"Sign Up"} link="/signup" />
-              <Login handleLogin={handleLogin} />
+              <Login handleLogin={handleLogin} handleErrorLogin={handleErrorLogin}/>
             </Route>
             <Route path="/signup">
               <Header loggedIn={loggedIn} page={"Log in"} link="/signin" />
@@ -203,6 +221,7 @@ function App() {
               page="Log out"
               link="/signin"
               loggedIn={loggedIn}
+              HandleLogedInUser={handleLogedInUser}
               component={Main}
               onEditProfileClick={handleEditProfileClick}
               onAddPlaceClick={handleAddPlaceClick}
