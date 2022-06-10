@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  useHistory,
+  Switch,
+  Route,
+} from "react-router-dom";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import Header from "./Header";
@@ -17,6 +22,7 @@ import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
 import success from "../images/success.svg";
 import error from "../images/error.svg";
+
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -28,26 +34,53 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const jwt = localStorage.getItem('jwt');
+  const [loggedInData, setLoggedInData] = useState(null);
+  const history = useHistory();
+  const handleLogedInUser = (loggedInData) => {
+    setLoggedIn(true);
+    setLoggedInData(loggedInData);
+  };
 
-  useEffect(async () => {
-    await auth.getContent(jwt)
-    .then( (res) =>{
-      if(res) {
-        setLoggedIn(true);
-        api
-        .init()
-        .then(([user, cards]) => {
-          setCurrentUser(user);
-          setCards(cards);
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      auth
+        .getContent(jwt)
+        .then((res) => {
+          if (res) {
+            const loggedInData = {
+              email: res.data.email,
+            };
+            setLoggedIn(true);
+            setLoggedInData(loggedInData);
+            api
+              .init()
+              .then(([user, cards]) => {
+                user.loggedIn = true;
+                setCurrentUser(user);
+                setCards(cards);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
         })
-        .catch((e) => {
-          console.log(e);
+        .then(() => {
+          history.push("/");
         });
-      }
-    });
-  },[loggedIn])
+    } else {
+      setLoggedIn(false);
+      console.log(loggedIn);
+    }
+  }, [loggedIn]);
 
+  useEffect(() => {
+    if (loggedIn) {
+      history.push("/");
+    } else {
+      history.push("/login");
+    }
+  }, [loggedIn, history]);
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
@@ -152,10 +185,6 @@ function App() {
     setLoggedIn(true);
   };
 
-  const  handleLogedInUser = async () => {
-     setLoggedIn(true);
-  };
-
   const handleErrorLogin = () => {
     setIsErrorPopupOpen(true);
   };
@@ -208,7 +237,10 @@ function App() {
           <Switch>
             <Route path="/signin">
               <Header loggedIn={loggedIn} page={"Sign Up"} link="/signup" />
-              <Login handleLogin={handleLogin} handleErrorLogin={handleErrorLogin}/>
+              <Login
+                handleLogin={handleLogin}
+                handleErrorLogin={handleErrorLogin}
+              />
             </Route>
             <Route path="/signup">
               <Header loggedIn={loggedIn} page={"Log in"} link="/signin" />
@@ -217,7 +249,7 @@ function App() {
 
             <ProtectedRoute
               path="/"
-              email={"avi413@gmail.com"}
+              email={loggedInData.email}
               page="Log out"
               link="/signin"
               loggedIn={loggedIn}
