@@ -29,6 +29,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
+  const [errText, setErrorText] = useState("Oops, something went wrong! Please try again.");
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -183,8 +184,10 @@ function App() {
     setLoggedIn(true);
   };
 
-  const handleErrorLogin = () => {
+  const handleErrorLogin = (err) => {
+    setErrorText(err);
     setIsErrorPopupOpen(true);
+
   };
 
   return (
@@ -199,7 +202,7 @@ function App() {
           />
           <InfoTooltip
             link={error}
-            title="Oops, something went wrong! Please try again."
+            title={errText}
             onClose={closeAllPopups}
             isOpen={isErrorPopupOpen}
           />
@@ -242,7 +245,7 @@ function App() {
             </Route>
             <Route path="/signup">
               <Header loggedIn={loggedIn} page={"Log in"} link="/signin" />
-              <Register />
+              <Register handleErrorLogin={handleErrorLogin}/>
             </Route>
 
             <ProtectedRoute
