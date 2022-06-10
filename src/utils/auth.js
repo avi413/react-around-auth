@@ -39,7 +39,7 @@ export const authorize = (password, email) => {
 };
 
 
-export const getContent = (token) => {
+export const checkResponse  = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
       method: 'GET',
       headers: {
@@ -50,4 +50,7 @@ export const getContent = (token) => {
     })
     .then(res => res.json())
     .then(data => data)
+    .catch((err) => {
+      console.log(err);
+    })
 }

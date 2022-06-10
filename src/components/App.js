@@ -45,12 +45,10 @@ function App() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       auth
-        .getContent(jwt)
+        .checkResponse(jwt)
         .then((res) => {
           if (res) {
-            const loggedInData = {
-              email: res.data.email,
-            };
+            const loggedInData =  res.data.email;
             setLoggedIn(true);
             setLoggedInData(loggedInData);
             api
@@ -249,7 +247,7 @@ function App() {
 
             <ProtectedRoute
               path="/"
-              email={loggedInData.email}
+              email={loggedInData}
               page="Log out"
               link="/signin"
               loggedIn={loggedIn}
