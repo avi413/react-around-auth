@@ -6,7 +6,7 @@ function EditProfilePopup(props) {
   const currentUser = React.useContext(CurrentUserContext);
 
   const [profileName, setProfileName] = useState("");
-  const [profileAboutMe, setProfileAboutMe] = useState({});
+  const [profileAboutMe, setProfileAboutMe] = useState("");
 
   const handleSubmit = (event) => {
     // Prevent the browser from navigating to the form address

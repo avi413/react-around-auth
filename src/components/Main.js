@@ -45,18 +45,13 @@ function Main(props) {
 
       <section className="gallery">
         <ul className="gallery__list">
-          {props.cards.map(function(card) {
-            const isLiked = card.likes.some(
-              (user) => user._id === currentUser._id
-            );
-
+          {props.cards.map(function (card) {
             return (
               <Card
                 click={props.onCardClick}
                 card={card}
                 key={card._id}
                 onCardLike={props.onCardLike}
-                isLiked={isLiked}
                 onCardDelete={props.onCardDelete}
               />
             );

@@ -21,7 +21,9 @@ const Register = (props) => {
         } else {
           props.history.push("/signin");
           props.handleRegister(
-            "User with Email: '" + res.data.email + "' created successfully"
+            "User with Email: '" +
+              res.data.email +
+              "' created successfully"
           );
         }
       })

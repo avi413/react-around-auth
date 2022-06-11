@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import * as auth from "../utils/auth.js";
 import AuthForm from "./AuthForm.js";
 const Login = (props) => {
   const [username, setUsernamee] = useState("");
   const [password, setPpassword] = useState("");
-
   const handleUsernameChange = (e) => setUsernamee(e.currentTarget.value);
   const handlePasswordChange = (e) => setPpassword(e.currentTarget.value);
 
@@ -18,11 +17,11 @@ const Login = (props) => {
     auth
       .authorize(password, username)
       .then((data) => {
-        if (typeof data === "undefined") {
-          props.handleErrorLogin("Username or password not exist");
+        if (data.isError) {
+          props.handleErrorLogin(data.message);
         } else if (data.token) {
-          props.handleLogin("Success! You have now been registered.");
           props.history.push("/");
+          props.handleLogin("Success! You have now been registered.");
         }
       })
       .catch((err) => {
@@ -30,6 +29,7 @@ const Login = (props) => {
         props.handleErrorLogin(err);
       });
   };
+  
 
   return (
     <AuthForm

@@ -11,9 +11,14 @@ function Card(props) {
       ? "gallery__item-trash-btn_visible"
       : " gallery__item-trash-btn_hidden"
   }`;
+
+
+  const isLiked = card.likes.some((user) => user._id === currentUser._id);
+
   const isLikedClass = `${
-    props.isLiked ? "gallery__like-btn_active" : "gallery__like-btn"
+    isLiked ? "gallery__like-btn_active" : "gallery__like-btn"
   }`;
+
   return (
     <div id={card.id}>
       <li className="gallery__item">
