@@ -16,7 +16,9 @@ const Login = (props) => {
     }
     auth
       .authorize(password, username)
+
       .then((data) => {
+        console.log(data);
         if (data.isError) {
           props.handleErrorLogin(data.message);
         } else if (data.token) {

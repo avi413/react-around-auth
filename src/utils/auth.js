@@ -10,14 +10,12 @@ export const register = (password, email) => {
     },
     body: JSON.stringify({ password, email }),
   })
-    .then((response) => {
-      return response.json();
-    })
+    .then(checkResponse)
     .then((data) => {
-      return checkResponse(data);
-    })
-
+      return data;
+    });
 };
+
 export const authorize = (password, email) => {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
@@ -28,24 +26,13 @@ export const authorize = (password, email) => {
     },
     body: JSON.stringify({ password, email }),
   })
-    .then((response) => response.json())
+    .then(checkResponse)
     .then((data) => {
-      checkResponse(data);
-      if (!data.error) {
+      if (data.token) {
         localStorage.setItem("jwt", data.token);
+        return data;
       }
-      return data;
-    })
-    
-};
-
-const checkResponse = (data) => {
-  if (data.message || data.error) {
-    data.isError = true;
-  } else {
-    data.isError = false;
-  }
-  return data;
+    });
 };
 
 export const checkToken = (token) => {
@@ -57,6 +44,13 @@ export const checkToken = (token) => {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => res.json())
-    .then((data) => checkResponse(data))
+    .then(checkResponse)
+    .then((data) => data);
 };
+
+function checkResponse(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Error: ${res.status}  ${res.statusText}`);
+}
