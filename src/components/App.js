@@ -29,7 +29,12 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
-  const [errText, setErrorText] = useState("Oops, something went wrong! Please try again.");
+  const [successText, setSuccessText] = useState(
+    "Success! You have now been registered."
+  );
+  const [errText, setErrorText] = useState(
+    "Oops, something went wrong! Please try again."
+  );
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -46,10 +51,10 @@ function App() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       auth
-        .checkResponse(jwt)
+        .checkToken(jwt)
         .then((res) => {
           if (res) {
-            const loggedInData =  res.data.email;
+            const loggedInData = res.data.email;
             setLoggedIn(true);
             setLoggedInData(loggedInData);
             api
@@ -59,22 +64,25 @@ function App() {
                 setCurrentUser(user);
                 setCards(cards);
               })
-              .catch((e) => {
-                console.log(e);
+              .catch((err) => {
+                setErrorText(err);
+                setIsErrorPopupOpen(true);
               });
           }
         })
         .then(() => {
+          setLoggedIn(true);
           history.push("/");
         });
     } else {
-      setLoggedIn(false);
+     
       console.log(loggedIn);
     }
   }, [loggedIn]);
 
   useEffect(() => {
     if (loggedIn) {
+      console.log(loggedIn);
       history.push("/");
     } else {
       history.push("/login");
@@ -105,6 +113,18 @@ function App() {
     });
   };
 
+  useEffect(() => {
+    const closeByEscape = (e) => {
+      if (e.key === "Escape") {
+        closeAllPopups();
+      }
+    };
+
+    document.addEventListener("keydown", closeByEscape);
+
+    return () => document.removeEventListener("keydown", closeByEscape);
+  }, []);
+
   const handleCardClick = (data) => {
     const src = data.link;
     const title = data.name;
@@ -122,8 +142,9 @@ function App() {
         setCurrentUser(user);
         closeAllPopups();
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        setErrorText(err);
+        setIsErrorPopupOpen(true);
       });
   };
 
@@ -134,8 +155,9 @@ function App() {
         setCurrentUser(data);
         closeAllPopups();
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        setErrorText(err);
+        setIsErrorPopupOpen(true);
       });
   };
 
@@ -152,8 +174,9 @@ function App() {
           )
         );
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        setErrorText(err);
+        setIsErrorPopupOpen(true);
       });
   };
 
@@ -163,8 +186,9 @@ function App() {
       .then(() => {
         setCards(cards.filter((item) => item._id !== card._id));
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        setErrorText(err);
+        setIsErrorPopupOpen(true);
       });
   };
 
@@ -175,19 +199,33 @@ function App() {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        setErrorText(err);
+        setIsErrorPopupOpen(true);
       });
   };
-  const handleLogin = () => {
+  const handleLogin = (text) => {
+    setSuccessText(text);
     setIsSuccessPopupOpen(true);
     setLoggedIn(true);
+  };
+
+  const handleIsLogedIn = (bool) => {
+    setLoggedIn(bool);
+  };
+
+  const handleRegister = (text) => {
+    setSuccessText(text);
+    setIsSuccessPopupOpen(true);
   };
 
   const handleErrorLogin = (err) => {
     setErrorText(err);
     setIsErrorPopupOpen(true);
-
+  };
+  const handleLogout = () => {
+    setLoggedIn(false);
+    localStorage.clear();
   };
 
   return (
@@ -196,7 +234,7 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
           <InfoTooltip
             link={success}
-            title="Success! You have now been registered."
+            title={successText}
             onClose={closeAllPopups}
             isOpen={isSuccessPopupOpen}
           />
@@ -241,33 +279,43 @@ function App() {
               <Login
                 handleLogin={handleLogin}
                 handleErrorLogin={handleErrorLogin}
+                history={history}
               />
             </Route>
             <Route path="/signup">
               <Header loggedIn={loggedIn} page={"Log in"} link="/signin" />
-              <Register handleErrorLogin={handleErrorLogin}/>
+              <Register
+                handleErrorLogin={handleErrorLogin}
+                handleRegister={handleRegister}
+              />
             </Route>
-
-            <ProtectedRoute
-              path="/"
-              email={loggedInData}
-              page="Log out"
-              link="/signin"
-              loggedIn={loggedIn}
-              HandleLogedInUser={handleLogedInUser}
-              component={Main}
-              onEditProfileClick={handleEditProfileClick}
-              onAddPlaceClick={handleAddPlaceClick}
-              onEditAvatarClick={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-              isEditProfilePopupOpen={isEditProfilePopupOpen}
-              isAddPlacePopupOpen={isAddPlacePopupOpen}
-              isEditAvatarPopupOpen={isEditAvatarPopupOpen}
-              selectedCard={selectedCard}
-              cards={cards}
-            />
+            <Route>
+              <Header
+                page="Log out"
+                email={loggedInData}
+                link="/signin"
+                handleLogout={handleLogout}
+              ></Header>
+              <ProtectedRoute
+                path="/"
+                history={history}
+                handleIsLogedIn={handleIsLogedIn}
+                loggedIn={loggedIn}
+                HandleLogedInUser={handleLogedInUser}
+                component={Main}
+                onEditProfileClick={handleEditProfileClick}
+                onAddPlaceClick={handleAddPlaceClick}
+                onEditAvatarClick={handleEditAvatarClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+                isEditProfilePopupOpen={isEditProfilePopupOpen}
+                isAddPlacePopupOpen={isAddPlacePopupOpen}
+                isEditAvatarPopupOpen={isEditAvatarPopupOpen}
+                selectedCard={selectedCard}
+                cards={cards}
+              ></ProtectedRoute>
+            </Route>
           </Switch>
           <Footer />
         </CurrentUserContext.Provider>

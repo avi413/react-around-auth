@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import * as auth from "../utils/auth.js";
-
+import AuthForm from "./AuthForm.js";
 const Login = (props) => {
   const [username, setUsernamee] = useState("");
   const [password, setPpassword] = useState("");
@@ -21,7 +21,7 @@ const Login = (props) => {
         if (typeof data === "undefined") {
           props.handleErrorLogin("Username or password not exist");
         } else if (data.token) {
-          props.handleLogin();
+          props.handleLogin("Success! You have now been registered.");
           props.history.push("/");
         }
       })
@@ -32,45 +32,34 @@ const Login = (props) => {
   };
 
   return (
-    <div className="authe">
-      <p className="authe__welcome">Log in</p>
-      <form onSubmit={handleSubmit} className="authe__form">
-        <input
-          className="authe__input"
-          placeholder="Email"
-          required
-          id="username"
-          name="username"
-          type="text"
-          value={username}
-          onChange={handleUsernameChange}
-        />
-        <input
-          className="authe__input"
-          placeholder="Password"
-          required
-          id="password"
-          name="password"
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-        <div className="authe__button-container">
-          <button type="submit" className="authe__btn" onClick={handleSubmit}>
-            Log in
-          </button>
-        </div>
-      </form>
-
-      <div className="authe__footer">
-        <p className="authe__text">
-          Ready to begin your journey?
-          <Link to="/signup" className="authe__link">
-            Sign up
-          </Link>
-        </p>
-      </div>
-    </div>
+    <AuthForm
+      title="Log in"
+      handleSubmit={handleSubmit}
+      buttonTitle="Log in"
+      subTitle="Ready to begin your journey?"
+      subTitleLink=" Sign up"
+    >
+      <input
+        className="authe__input"
+        placeholder="Email"
+        required
+        id="username"
+        name="username"
+        type="text"
+        value={username}
+        onChange={handleUsernameChange}
+      />
+      <input
+        className="authe__input"
+        placeholder="Password"
+        required
+        id="password"
+        name="password"
+        type="password"
+        value={password}
+        onChange={handlePasswordChange}
+      />
+    </AuthForm>
   );
 };
 

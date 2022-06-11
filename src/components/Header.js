@@ -14,6 +14,7 @@ function Header(props) {
               exact
               to={props.link}
               className="header__item"
+              onClick={props.handleLogout}
             >
              {props.page}
             </NavLink>
