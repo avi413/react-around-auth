@@ -80,14 +80,6 @@ function App() {
     }
   }, [loggedIn]);
 
-  useEffect(() => {
-    if (loggedIn) {
-      console.log(loggedIn);
-      history.push("/");
-    } else {
-      history.push("/login");
-    }
-  }, [loggedIn, history]);
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
