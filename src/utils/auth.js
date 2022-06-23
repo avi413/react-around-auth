@@ -1,4 +1,4 @@
-export const BASE_URL = "https://register.nomoreparties.co";
+export const BASE_URL = "http://localhost:3000"//"https://register.nomoreparties.co";
 
 export const register = (password, email) => {
   return fetch(`${BASE_URL}/signup`, {
